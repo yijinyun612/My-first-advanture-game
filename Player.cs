@@ -105,7 +105,7 @@ public partial class Player : CharacterBody3D
 
 
 
-	public override void _Ready()
+	public override void _Ready()//场景加载完成的那一刻，只执行一次
 	{
 		// ★ 让 Player 在暂停时仍然接收 _Input
 		ProcessMode = ProcessModeEnum.Always;
@@ -215,7 +215,7 @@ public partial class Player : CharacterBody3D
 
 
 
-	public override void _PhysicsProcess(double delta)
+	public override void _PhysicsProcess(double delta)//每一帧重新计算角色的功能
 	{
 		// ★ 暂停时不再更新移动 / 动画，只保留输入
 		if (GetTree().Paused)
@@ -246,7 +246,7 @@ public partial class Player : CharacterBody3D
 
 
 	// ===================== ★ 输入 =====================
-	public override void _Input(InputEvent @event)
+	public override void _Input(InputEvent @event)//只判断“发生了什么输入”，不负责角色怎么动
 	{
 		// 先拿到 inventory：在当前场景根节点下面找名叫 "inventory" 的控件
 		Control inventoryControl = null;
