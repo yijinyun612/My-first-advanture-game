@@ -334,7 +334,7 @@ public partial class Player : CharacterBody3D
 
 
 	// ★ 小工具：切换 inventory 显隐 + 暂停
-	private void ToggleInventory(Control inventory)
+	private void ToggleInventory(Control inventory)//装备管理器
 	{
 		bool newVisible = !inventory.Visible;
 		inventory.Visible = newVisible;
@@ -456,7 +456,7 @@ public partial class Player : CharacterBody3D
 
 
 	// =============== 移动 / 动画 ===============
-	private void HandleMove(float delta)
+	private void HandleMove(float delta)//动画管理器
 	{
 		_movementInput = Input.GetVector("left", "right", "forward", "backward");
 
@@ -534,22 +534,6 @@ public partial class Player : CharacterBody3D
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	// =============== 攻击 / 防御 ===============
 	private void HandleAttack()
 	{
@@ -568,7 +552,10 @@ public partial class Player : CharacterBody3D
 
 
 
-	private void PlayCurrentWeaponSound()
+
+
+
+	private void PlayCurrentWeaponSound()//声音触发器
 	{
 		// 利用 WeaponSlot 里当前武器的 WeaponSound 来播放音效
 		if (_weaponHolder == null || _weaponHolder.GetChildCount() == 0)
@@ -641,23 +628,6 @@ public partial class Player : CharacterBody3D
 		bool isDefending = Input.IsActionPressed("defend");
 		_defending = isDefending;
 		_animTree.Set(DefendBlendPath, isDefending ? 1.0f : 0.0f);
-	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
