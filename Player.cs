@@ -9,7 +9,7 @@ public partial class Player : CharacterBody3D
 	[Export] public float RunSpeed = 6f;
 	[Export] public float DefendSpeed = 2f;
 	[Export] public float Acceleration = 8f;
-	[Export] public float Deceleration = 4f;
+	[Export] public float Deceleration = 4f;//减速
 
 	// ★ 血量
 	[Export] public int Health = 5;
@@ -30,7 +30,7 @@ public partial class Player : CharacterBody3D
 	// ===== 攻击 =====
 	private bool _attacking = false;
 	private float _attackTimer = 0f;
-	private const float AttackMaxDuration = 0.55f;
+	private const float AttackMaxDuration = 0.55f;//攻击最大持续时间
 	private const string AttackOneShotPath = "parameters/AttackOneShot/request";
 
 	// ===== 防御 =====
@@ -66,16 +66,14 @@ public partial class Player : CharacterBody3D
 	public List<System.Collections.Generic.Dictionary<string, object>> playerStyles = new();
 
 	// ====== 挤压伸展当前值 ======
-	private float _squashAndStretch = 1.0f;
-	public float SquashAndStretch
-	{
+	private float _squashAndStretch = 1.0f;//用属性（Property）控制角色模型缩放的机制：	
+	public float SquashAndStretch{
 		get => _squashAndStretch;
 		set
 		{
 			_squashAndStretch = value;
 			if (_skin != null)
 			{
-				float negative = 1.0f + (1.0f - _squashAndStretch);
 				_skin.Scale = new Vector3(negative, _squashAndStretch, negative);
 			}
 		}
