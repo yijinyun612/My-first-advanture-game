@@ -72,10 +72,9 @@ public partial class Player : CharacterBody3D
 		set
 		{
 			_squashAndStretch = value;
-			if (_skin != null)
+			if (_skin != null)//判空原因：👉 防止游戏还没加载完就报错			
 			{
-				_skin.Scale = new Vector3(negative, _squashAndStretch, negative);
-			}
+				_skin.Scale = new Vector3(negative, _squashAndStretch, negative);//这一行是打击感的灵魂。上下被拉伸，横向被挤压			}
 		}
 	}
 
@@ -91,12 +90,6 @@ public partial class Player : CharacterBody3D
 	// ===== HUD（血量显示，按教程） =====
 	[Export] public NodePath HudPath;   // Inspector 可直接拖 HUD 根节点
 	private HUD _hud;                    // 运行时引用
-
-
-
-
-
-
 
 
 
