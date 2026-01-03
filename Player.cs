@@ -66,13 +66,14 @@ public partial class Player : CharacterBody3D
 	public List<System.Collections.Generic.Dictionary<string, object>> playerStyles = new();
 
 	// ====== 挤压伸展当前值 ======
-	private float _squashAndStretch = 1.0f;//用属性（Property）控制角色模型缩放的机制：	
-	public float SquashAndStretch{
+	private float _squashAndStretch = 1.0f;//👉 外部不能直接改，防止乱改数值。_squashAndStretch：👉 真正存数据的“仓库”•	1.0f：👉 默认不变形（Property）控制角色模型缩放的机制：当你“赋值”的那一瞬间，机关启动了
+	public float SquashAndStretch//当外界赋值，触发后面的视觉变化
+	{
 		get => _squashAndStretch;
-		set
+		set//拦截所有赋值行为，保证任何变化都走同一条逻辑		
 		{
 			_squashAndStretch = value;
-			if (_skin != null)//判空原因：👉 防止游戏还没加载完就报错			
+			if (_skin != null)//判空原因：👉 防止游戏还没加载完就报错		“角色模型已经生成了吗？如果还没加载出来，别动它。”
 			{
 				_skin.Scale = new Vector3(negative, _squashAndStretch, negative);//这一行是打击感的灵魂。上下被拉伸，横向被挤压			}
 		}
