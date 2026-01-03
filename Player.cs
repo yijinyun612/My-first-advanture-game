@@ -99,7 +99,7 @@ public partial class Player : CharacterBody3D
 
 	public override void _Ready()//场景加载完成的那一刻，只执行一次
 	{
-		// ★ 让 Player 在暂停时仍然接收 _Input
+		// ★ 让 Player 在暂停时仍然接收 _Input不管游戏现在是不是“暂停状态”这个节点的 _Process / _PhysicsProcess 都要继续执行		
 		ProcessMode = ProcessModeEnum.Always;
 
 		// -- 相机 / 模型 --
@@ -107,8 +107,7 @@ public partial class Player : CharacterBody3D
 			_camera = GetNodeOrNull<Camera3D>(CameraPath);
 
 		if (SkinPath != null && !SkinPath.IsEmpty)
-			_skin = GetNodeOrNull<Node3D>(SkinPath);
-
+			_skin = GetNodeOrNull<Node3D>(SkinPath);//GetNode<T>() → 找不到直接崩，GetNodeOrNull<T>() → 工程安全写法
 		// -- 动画树 --
 		if (AnimationTreePath != null && !AnimationTreePath.IsEmpty)
 		{
@@ -117,8 +116,7 @@ public partial class Player : CharacterBody3D
 			{
 				_animTree.Active = true;
 
-				var statePlaybackVar = _animTree.Get("parameters/StateMachine/playback");
-				if (statePlaybackVar.VariantType != Variant.Type.Nil)
+				var statePlaybackVar = _animTree.Get("parameters/StateMachine/playback");//	•	AnimationTree 是 通用数据容器，它不知道你拿的是什么类型，所以只能给你一个 Variant（万能盒子）				if (statePlaybackVar.VariantType != Variant.Type.Nil)
 					_moveState = statePlaybackVar.As<AnimationNodeStateMachinePlayback>();
 
 				var attackAnimVar = _animTree.Get("parameters/AttackAnimation");
