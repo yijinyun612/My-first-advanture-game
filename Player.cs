@@ -120,11 +120,14 @@ public partial class Player : CharacterBody3D
 					_moveState = statePlaybackVar.As<AnimationNodeStateMachinePlayback>();
 
 				var attackAnimVar = _animTree.Get("parameters/AttackAnimation");
-				if (attackAnimVar.VariantType != Variant.Type.Nil)
-					_attackAnimation = attackAnimVar.As<AnimationNodeAnimation>();
+				if (attackAnimVar.VariantType != Variant.Type.Nil)//nil：根本没东西，在 Godot 里：Variant = 一个“什么都能装的盒子”
+					_attackAnimation = attackAnimVar.As<AnimationNodeAnimation>();//_attackAnimation-变量，AnimationNodeAnimation-类型
+					//attackAnimVar.As<AnimationNodeAnimation>() 这是 Godot C# 提供的安全类型转换方法，如果内容真的是 AnimationNodeAnimation，那就把你当作这个类型用
+					//从 attackAnimVar 这个“动画节点变量”里，尝试取出一个真正的「攻击动画节点」，如果成功，就存到 _attackAnimation 里备用。
+				    //先从树里拿一个“泛型节点”，再 As 成具体节点，调用具体 API（如设置动画名）
+					//As<T>() = Godot 提供的安全类型转换，转成功得到对象，失败得到 null（Nil 状态）。
 
-				_animTree.AnimationFinished += OnAnimTreeAnimationFinished;
-			}
+				_animTree.AnimationFinished += OnAnimTreeAnimationFinished;//当 AnimationTree 里“某个动画播放结束”时，自动调用OnAnimTreeAnimationFinished 这个方法。
 			else
 			{
 				GD.PrintErr($"❌ 找不到 AnimationTree: {AnimationTreePath}");
@@ -135,7 +138,7 @@ public partial class Player : CharacterBody3D
 		if (AnimationPlayerPath != null && !AnimationPlayerPath.IsEmpty)
 		{
 			_animPlayer = GetNodeOrNull<AnimationPlayer>(AnimationPlayerPath);
-			_animPlayer?.Stop();
+			_animPlayer?.Stop();//“如果左边不是 null，才调用右边的方法” 这是简写体
 		}
 
 		// -- 重力 --
