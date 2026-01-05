@@ -142,7 +142,8 @@ public partial class Player : CharacterBody3D
 		}
 
 		// -- 重力 --
-		_gravity = ProjectSettings.GetSetting("physics/3d/default_gravity").AsSingle();
+		_gravity = ProjectSettings.GetSetting("physics/3d/default_gravity").AsSingle();//AsSingle/float单精度浮点数 把3d重力值转换成单精度浮点数，ProjectSettings = Godot 提供的全局配置接口，GetSetting() = 按 路径 获取设置项
+//	"physics/3d/default_gravity" = 3D 物理默认重力（Godot 编辑器里 Physics → 3D → Default Gravity）
 
 		// -- 被打音效节点 --
 		if (HitSoundPath != null && !HitSoundPath.IsEmpty)
@@ -160,7 +161,7 @@ public partial class Player : CharacterBody3D
 		// -- 武器：找到右手的 WeaponSlot，清空旧武器，只留空 Slot --
 		_rightHand = FindRightHand();
 		if (_rightHand != null)
-			_weaponHolder = GetOrCreateWeaponHolder(_rightHand);
+			_weaponHolder = GetOrCreateWeaponHolder(_rightHand);//GetOrCreate = 保证我一定能拿到一个可用对象，
 
 		// -- 盾牌：找到左手的 ShieldSlot，清空旧盾牌，只留空 Slot --
 		_leftHand = FindLeftHand();
@@ -172,7 +173,7 @@ public partial class Player : CharacterBody3D
 		if (_headSlot != null)
 		{
 			foreach (Node child in _headSlot.GetChildren())
-				child.QueueFree();
+				child.QueueFree();//QueueFree() 的优势：	延迟到安全时机•	允许：•	在 _Process•	在 foreach•	在信号回调中
 		}
 
 		// ★ 创建自己的被打定时器
@@ -181,21 +182,22 @@ public partial class Player : CharacterBody3D
 			OneShot = true,
 			WaitTime = 0.35f
 		};
-		AddChild(_hitTimer);
+		AddChild(_hitTimer);//把一个节点，挂到当前节点下面，成为子节点
 
 		// ===== 获取 HUD 并初始化心形 =====
 		_hud = null;
 		if (HudPath != null && !HudPath.IsEmpty)
 			_hud = GetNodeOrNull<HUD>(HudPath);
 		if (_hud == null)
-			_hud = GetTree().GetFirstNodeInGroup("HUD") as HUD;
+			_hud = GetTree().GetFirstNodeInGroup("HUD") as HUD;//查找第一个被加入到 "HUD" 这个 Group 的节点
+//as HUD 这是 C# 的安全类型转换，如果这个节点真的是 HUD 类型，就转成 HUD，如果不是，返回 null，不报错。
 
 		if (_hud == null)
 			GD.PrintErr("❌ 没找到 HUD：请给 Player 的 HudPath 指向 HUD，或把 HUD 根节点加入 Group: \"HUD\"。");
 		else
-			_hud.Setup(Health);
+			_hud.Setup(Health);//把角色当前的“生命值数据”，交给 HUD，让 HUD 按这个数据完成初始化显示。
 	}
-
+//Setup(...) 这是一个初始化方法，而不是 Update / Tick。通常只在：•	角色生成•	场景加载•	HUD 刚绑定角色的时候调用。
 
 
 
