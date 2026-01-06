@@ -216,7 +216,7 @@ public partial class Player : CharacterBody3D
 		if (GetTree().Paused)//GetTree() 获取当前 SceneTree（整个游戏的运行树）		
 		return;//如果游戏暂停，立刻退出当前函数，后面的代码都不执行。因为前面的代码决定了游戏暂停时，重力，碰撞继续产生 所以这里需要手动暂停
 
-		HandleMove((float)delta);
+		HandleMove((float)delta);//HandleMove方法名（函数）	“处理移动相关的事情”		delta 原本是 double	速度 / 向量一般用 float 所以做了 显式类型转换		“这一帧过去了多少时间”		
 		HandleJump((float)delta);
 		HandleRotateSkin((float)delta);
 		UpdateAnimationState();
