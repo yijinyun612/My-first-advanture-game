@@ -247,7 +247,7 @@ public partial class Player : CharacterBody3D
 		Control inventoryControl = null;
 		if (GetTree().CurrentScene != null)
 			inventoryControl = GetTree().CurrentScene.GetNodeOrNull<Control>("inventory");
-
+                      //获取control类型的叫做inventory的uI控件，control是所有/UI的基类
 		bool inventoryOpen = inventoryControl != null && inventoryControl.Visible;
 
 		if (Input.IsActionJustPressed("ui_exit_to_title"))
