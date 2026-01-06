@@ -266,7 +266,7 @@ public partial class Player : CharacterBody3D
 			if (inventoryControl != null)
 			{
 				// 如果有背包，用 ESC 开关背包
-				ToggleInventory(inventoryControl);
+				ToggleInventory(inventoryControl);//“Toggle” = 切换 / 开关
 			}
 			else
 			{
