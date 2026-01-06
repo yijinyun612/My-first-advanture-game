@@ -248,13 +248,15 @@ public partial class Player : CharacterBody3D
 		if (GetTree().CurrentScene != null)
 			inventoryControl = GetTree().CurrentScene.GetNodeOrNull<Control>("inventory");
                       //获取control类型的叫做inventory的uI控件，control是所有/UI的基类
-		bool inventoryOpen = inventoryControl != null && inventoryControl.Visible;
-
+		bool inventoryOpen = inventoryControl != null && inventoryControl.Visible;//只有在“背包节点存在”并且“当前是可见状态”时，才认为背包是打开的
+		//bool inventoryOpen = ... 定义一个布尔变量，用来描述一个状态，这个状态会被后续逻辑使用，这是一个不做任何行为的状态判断
 		if (Input.IsActionJustPressed("ui_exit_to_title"))
 		{
 			GD.Print("Pressed exit to title!");
 
-			GetTree().ChangeSceneToFile("res://title_screen.tscn");
+			GetTree().ChangeSceneToFile("res://title_screen.tscn");//ChangeSceneToFile() → 切换场景的方法
+			//整体效果：1.	卸载当前场景  2.	加载新场景  3.	设置新场景为 CurrentScene
+			//使用时机  •	游戏开始 → 切到主菜单  •	游戏结束 → 切到结算界面  •	关卡通关 → 切下一个关卡
 		}
 
 
