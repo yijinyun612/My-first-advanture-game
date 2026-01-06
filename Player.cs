@@ -213,8 +213,8 @@ public partial class Player : CharacterBody3D
 	public override void _PhysicsProcess(double delta)//每一帧重新计算角色的功能
 	{
 		// ★ 暂停时不再更新移动 / 动画，只保留输入
-		if (GetTree().Paused)
-			return;
+		if (GetTree().Paused)//GetTree() 获取当前 SceneTree（整个游戏的运行树）		
+		return;//如果游戏暂停，立刻退出当前函数，后面的代码都不执行。因为前面的代码决定了游戏暂停时，重力，碰撞继续产生 所以这里需要手动暂停
 
 		HandleMove((float)delta);
 		HandleJump((float)delta);
