@@ -339,7 +339,7 @@ public partial class Player : CharacterBody3D
 		GetTree().Paused = newVisible;
 		Input.MouseMode = newVisible
 			? Input.MouseModeEnum.Visible
-			: Input.MouseModeEnum.Captured;
+			: Input.MouseModeEnum.Captured;//三元运算符，判断游戏是否停止，再决定鼠标是否显示
 
 		// 打开菜单时，把焦点给当前 Tab 的第一个 Item
 		if (newVisible && inventory is Inventory inv)
