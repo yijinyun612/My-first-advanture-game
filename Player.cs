@@ -361,26 +361,26 @@ public partial class Player : CharacterBody3D
 
 
 	// =============== 找节点 ==================
-	private Node3D FindRightHand()
+	private Node3D FindRightHand()//定义函数签名
 	{
 		if (RightHandPath != null && !RightHandPath.IsEmpty)
 		{
 			var n = GetNodeOrNull<Node3D>(RightHandPath);
-			if (n != null) return n;
+			if (n != null) return n;//找到了就立刻返回
 		}
 
 		string[] candidates =
 		{
 			"PlayerSkin/Rogue/Rig/Skeleton3D/RightHand/WeaponSlot",
 			"PlayerSkin/Rogue/Rig/Skeleton3D/RightHand"
-		};
+		};//定义字符串数组
 		foreach (var path in candidates)
 		{
 			var n = GetNodeOrNull<Node3D>(path);
-			if (n != null)
+			if (n != null)//找到了就立刻返回
 				return n;
 		}
-		return null;
+		return null;//没有找到就返回空
 	}
 	
 
