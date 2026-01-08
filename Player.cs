@@ -138,7 +138,7 @@ public partial class Player : CharacterBody3D
 		if (AnimationPlayerPath != null && !AnimationPlayerPath.IsEmpty)
 		{
 			_animPlayer = GetNodeOrNull<AnimationPlayer>(AnimationPlayerPath);
-			_animPlayer?.Stop();//“如果左边不是 null，才调用右边的方法” 这是简写体
+			_animPlayer?.Stop();//**“如果左边不是 null，才调用右边的方法” 这是简写体
 		}
 
 		// -- 重力 --
@@ -240,7 +240,8 @@ public partial class Player : CharacterBody3D
 
 
 
-	// ===================== ★ 输入 =====================
+	// ===================== ★ 输入 =====================  
+	//这一段代码超级绕 有待优化
 	public override void _Input(InputEvent @event)//只判断“发生了什么输入”，不负责角色怎么动
 	{
 		// 先拿到 inventory：在当前场景根节点下面找名叫 "inventory" 的控件
@@ -260,7 +261,7 @@ public partial class Player : CharacterBody3D
 		}
 
 
-		// ★ ESC：只负责开关背包 / 暂停，不再退出游戏
+		// ★ ESC：只负责开关背包 / 暂停，不再退出游戏 ***这一段代码逻辑超级绕，有待优化
 		if (@event.IsActionPressed("ui_cancel"))
 		{
 			if (inventoryControl != null)
@@ -280,12 +281,12 @@ public partial class Player : CharacterBody3D
 			return;
 		}
 
-		// ★ M：打开 / 关闭背包（menu 动作）
+		// ★ M：打开 / 关闭背包（menu 动作），***这一段代码逻辑超级绕，有待优化
 		if (@event.IsActionPressed("menu"))
 		{
 			if (inventoryControl != null)
 			{
-				ToggleInventory(inventoryControl);
+				ToggleInventory(inventoryControl);//invenoryControl交给函数ToggleIventory来处理
 			}
 			else
 			{
@@ -316,19 +317,6 @@ public partial class Player : CharacterBody3D
 		// ✅ 不再处理 switch_weapon / switch_shield / switch_style
 		//    真正换装交给 Inventory + PlayerEquipment
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 	// ★ 小工具：切换 inventory 显隐 + 暂停
 	private void ToggleInventory(Control inventory)//装备管理器
@@ -457,16 +445,17 @@ public partial class Player : CharacterBody3D
 	// =============== 移动 / 动画 ===============
 	private void HandleMove(float delta)//动画管理器
 	{
-		_movementInput = Input.GetVector("left", "right", "forward", "backward");
-
-		float targetSpeed = BaseSpeed;
+		_movementInput = Input.GetVector("left", "right", "forward", "backward");//Input.GetVector Godot 提供的一个“读输入”的函数		float targetSpeed = BaseSpeed;
 		if (Input.IsActionPressed("run"))
 			targetSpeed = RunSpeed;
 		if (_defending)
 			targetSpeed = DefendSpeed;
 
 		if (_camera != null && _movementInput != Vector2.Zero)
-			_movementInput = _movementInput.Rotated(-_camera.GlobalRotation.Y);
+			_movementInput = _movementInput.Rotated(-_camera.GlobalRotation.Y);//Vector2 是二维向量类型，存放 x 和 y 两个数。
+//                            玩家想往前走               摄像头
+
+
 
 		Vector2 vel2D = new Vector2(Velocity.X, Velocity.Z);
 
