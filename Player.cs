@@ -343,6 +343,8 @@ public partial class Player : CharacterBody3D
 
 		// 打开菜单时，把焦点给当前 Tab 的第一个 Item
 		if (newVisible && inventory is Inventory inv)
+		//new visible是bool变量 状态未确定 由运行程序决定
+		//判断：“inventory 这个对象，是不是 Inventory 类型？”如果判断成立：把 inventory 安全地转成 Inventory，并赋值给一个新变量 inv
 		{
 			inv.FocusFirstItem();
 		}
