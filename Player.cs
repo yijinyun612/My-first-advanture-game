@@ -453,11 +453,12 @@ public partial class Player : CharacterBody3D
 
 		if (_camera != null && _movementInput != Vector2.Zero)
 			_movementInput = _movementInput.Rotated(-_camera.GlobalRotation.Y);//Vector2 是二维向量类型，存放 x 和 y 两个数。
-//                            玩家想往前走               摄像头
+//                            玩家想往前走               摄像头  这里的负号指的是朝相反方向转
 
 
 
 		Vector2 vel2D = new Vector2(Velocity.X, Velocity.Z);
+		//提取二维平面速度
 
 		if (_movementInput != Vector2.Zero)
 			vel2D = vel2D.MoveToward(_movementInput * targetSpeed, Acceleration * delta);
