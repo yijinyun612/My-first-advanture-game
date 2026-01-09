@@ -462,6 +462,7 @@ public partial class Player : CharacterBody3D
 
 		if (_movementInput != Vector2.Zero)
 			vel2D = vel2D.MoveToward(_movementInput * targetSpeed, Acceleration * delta);
+			//newVel = current + clamp(target - current, maxChange)
 		else
 			vel2D = vel2D.MoveToward(Vector2.Zero, Deceleration * delta);
 
