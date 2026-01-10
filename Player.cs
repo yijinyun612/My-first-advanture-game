@@ -465,8 +465,10 @@ public partial class Player : CharacterBody3D
 			//newVel = current + clamp(target - current, maxChange)
 		else
 			vel2D = vel2D.MoveToward(Vector2.Zero, Deceleration * delta);
+//当没有移动输入时，让角色的平面速度，以减速度限制，逐渐衰减到 0。
 
 		Velocity = new Vector3(vel2D.X, Velocity.Y, vel2D.Y);
+//把计算好的平面移动速度，写回到角色的三维速度中，同时保留原有的上下速度。
 	}
 
 
@@ -521,6 +523,13 @@ public partial class Player : CharacterBody3D
 			return to;
 		return from + Mathf.Sign(diff) * step;
 	}
+
+
+
+
+
+
+
 
 
 
