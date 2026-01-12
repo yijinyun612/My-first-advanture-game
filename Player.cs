@@ -477,8 +477,13 @@ public partial class Player : CharacterBody3D
 	{
 		if (!IsOnFloor())
 			Velocity += Vector3.Down * _gravity * delta;
+			// 让角色每一帧都受到重力影响
+			//Vector3.Down == new Vector3(0, -1, 0) 世界坐标中“正下方”的单位方向 速度 = 原速度 + 加速度 × 时间
+			//detla 从上一帧到这一帧，经过了多少时间
 		else if (Input.IsActionJustPressed("jump"))
 			Velocity = new Vector3(Velocity.X, JumpSpeed, Velocity.Z);
+			//JumpSpeed 是一脚蹬地的力道
+			//保持角色当前的水平速度不变，把“竖直方向的速度”直接改成起跳速度。
 	}
 
 
@@ -490,10 +495,17 @@ public partial class Player : CharacterBody3D
 			return;
 
 		float targetAngle = -_movementInput.Angle() + Mathf.Pi / 2f;
+		//根据玩家输入的移动方向，算出角色应该朝向的旋转角度，并做一次坐标系对齐修正。
+		//Angle() = 从 (1, 0) 转到 _movementInput 的角度
+		//π / 2 = 90°  用来把“数学的右”，对齐成“角色的前” 游戏角色默认朝向：↑ 前方 = 0°  ，→ 右   = 90°
 		float currentY = _skin.Rotation.Y;
+		//读取角色模型当前绕 Y 轴旋转了多少角度，并保存到一个变量里。/现在这个角色，脸正朝着哪个方向？
 		float newY = MoveTowardAngle(currentY, targetAngle, delta * 6f);
+		//让 currentY（当前朝向角度），以每秒最多 6 的角速度，，平滑地靠近 targetAngle（目标朝向角度），并把结果存到 newY。
 		_skin.Rotation = new Vector3(_skin.Rotation.X, newY, _skin.Rotation.Z);
-	}
+		//把角色的脸左右旋转角度更新为计算出的 newY，同时保留原来的低头/歪头角度。
+		// new Vector3(...)	创建一个新的 Vector3，把新的 Y 值塞进去，让角色“脸朝向正确方向”，同时保持身体其他旋转不变
+		}
 
 
 
