@@ -597,6 +597,7 @@ public partial class Player : CharacterBody3D
 		var weaponNode = _weaponHolder.GetChild(0);
 
 		if (weaponNode is WeaponSound wsRoot)
+		//is 是 类型判断，判断运行时这个节点是不是 WeaponSound 这个类
 		{
 			wsRoot.PlayAudio();
 			return;
@@ -604,6 +605,9 @@ public partial class Player : CharacterBody3D
 
 		var ws = (weaponNode as Node)?.GetNodeOrNull<WeaponSound>("WeaponSound");
 		ws?.PlayAudio();
+		//	•	as：安全转型  •	如果 weaponNode 不是 Node → 返回 null，不会报错
+		// 在 Godot 里几乎所有节点都是 Node，所以这一步更多是 防御式写法。
+		//从 weaponNode 身上，尝试找一个名为 WeaponSound 的子节点，如果找到了，就播放音效，找不到就算了。
 	}
 
 
@@ -619,6 +623,7 @@ public partial class Player : CharacterBody3D
 			return;
 
 		if (!activeVar.As<bool>())
+		//! = 逻辑取反
 		{
 			_attacking = false;
 			_attackTimer = 0f;
