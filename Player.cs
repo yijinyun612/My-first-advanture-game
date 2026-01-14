@@ -608,6 +608,8 @@ public partial class Player : CharacterBody3D
 		//	•	as：安全转型  •	如果 weaponNode 不是 Node → 返回 null，不会报错
 		// 在 Godot 里几乎所有节点都是 Node，所以这一步更多是 防御式写法。
 		//从 weaponNode 身上，尝试找一个名为 WeaponSound 的子节点，如果找到了，就播放音效，找不到就算了。
+
+		//这个 ? 叫做「空条件运算符（null-conditional operator）」，如果前面是 null，就直接停，不继续往右执行
 	}
 
 
