@@ -595,7 +595,7 @@ public partial class Player : CharacterBody3D
 			return;
 
 		var weaponNode = _weaponHolder.GetChild(0);
-
+          //拿第 0 个子节点
 		if (weaponNode is WeaponSound wsRoot)
 		//is 是 类型判断，判断运行时这个节点是不是 WeaponSound 这个类
 		{
