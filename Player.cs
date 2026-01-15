@@ -775,25 +775,35 @@ public partial class Player : CharacterBody3D
 		}
 
 		Shield currentShield = GetCurrentShield();
+		//GetCurrentShield()	这是一个方法调用。该方法返回一个 Shield 对象（或引用），表示当前装备或生效的护盾。
+		
 		if (_defending && currentShield != null)
 		{
 			damage *= currentShield.Defense;
+			//把 damage 自己乘以右边的值，再赋值给 damage。
 			currentShield.Flash();
 			_shieldHitSound?.Play();
+			//C# 的空值条件访问运算符（null-conditional operator）。
 		}
 		else
 		{
 			DoSquashAndStretch(1.2f, 0.2f);
+			//名字直译就是“做挤压和拉伸”，常用于 动作游戏角色或物体受击、落地等弹性动画效果。
 			_hitSound?.Play();
 		}
 
 		Health -= Mathf.CeilToInt(damage);
+		//Health = Health - x;
+		//	CeilToInt 的意思是 向上取整并转为整数。
 		GD.Print($"player 剩余血量: {Health}");
 
 		_hud?.Setup(Mathf.Max(Health, 0));
-
+		//Setup(...)，_hud 的方法，通常用来 更新血量显示。
+		//	•	Mathf.Max 是 Unity 的数学工具方法，返回两个值中较大者。
+		//	•	防止血条显示为负数。	•	如果 Health 是负数（比如血量被扣到 -5），显示为 0
 		if (Health <= 0)
 			DeathLogic();
+			//方法内部通常会处理角色死亡后的各种效果，
 
 		_hitTimer?.Start();
 	}
@@ -809,12 +819,29 @@ public partial class Player : CharacterBody3D
 
 
 	private void DoSquashAndStretch(float value, float duration)
+	//float duration：表示动画持续时间（单位通常是秒）	
 	{
 		var tween = CreateTween();
+		//Tween 是一种 过渡动画对象，常用于 Unity 或 Godot 动画系统，用来平滑地改变物体属性（位置、旋转、缩放等）。
 		tween.TweenProperty(this, nameof(SquashAndStretch), value, duration);
+		//TweenProperty(...)，Tween 的方法，用于 对某个对象的属性做缓动动画（Tweening），作用是从当前值平滑变化到目标值，动画时间由 duration 决定。
+		//	•	nameof 是 C# 的关键字，用来获取 属性或方法的名字字符串。
+		//等价于 "SquashAndStretch"，但编译器会检查拼写是否正确，更安全。
+	    //•	Tween 会平滑改变这个属性的值。
+		//duration 	动画持续时间（秒），控制 Tween 的速度。
 		tween.TweenProperty(this, nameof(SquashAndStretch), 1.0f, duration * 1.8f)
+		//•	1表示 恢复到原始状态，因为通常缩放为 1.0 就是原始比例。这句 Tween 用于动画结束后，把物体恢复到正常大小。
+        //•	动画持续时间变长了（1.8 倍），用于 慢慢恢复到原始状态，让动画看起来更自然和柔和。
 			.SetEase(Tween.EaseType.Out);
+    //.SetEase(...)
+	//•	Tween 方法，用来设置动画的 缓动（Easing）类型。
+	//•	缓动决定属性变化的速度曲线：动画开始快还是慢、结束快还是慢、是否弹性等。
+	//•	这行代码是对前面创建的 Tween 对象进行配置。
+    // Tween.EaseType.Out
+	//•	缓动类型枚举值
+	//•	Out 表示 动画减速（Ease Out）：•	开始时快	结束时慢
 	}
+
 
 
 
