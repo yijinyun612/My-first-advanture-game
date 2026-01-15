@@ -648,7 +648,7 @@ public partial class Player : CharacterBody3D
 	}
 
 
-
+//当任意名字包含 “Attack” 的动画播放完毕时，认为攻击结束，清空攻击状态。程序保底使用
 	private void OnAnimTreeAnimationFinished(StringName animName)
 	{
 		if (animName.ToString().Contains("Attack"))
@@ -668,8 +668,10 @@ public partial class Player : CharacterBody3D
 		bool isDefending = Input.IsActionPressed("defend");
 		_defending = isDefending;
 		_animTree.Set(DefendBlendPath, isDefending ? 1.0f : 0.0f);
-
-
+		//三目运算符，判断isDefending==true➡️结果是1，==false➡️结果是0
+		//_animTree.Set(路径, 数值);
+		//按住➡️blend=1➡️播放防御动画
+		//松开➡️blend=0➡️回到普通动画
 
 
 	// =============== Weapon / Shield Holder（清理旧武器/盾牌，只保留 Slot） ===============
@@ -687,6 +689,7 @@ public partial class Player : CharacterBody3D
 		// ★ 1）清空 WeaponSlot 里面原来挂着的东西
 		foreach (Node child in holder.GetChildren())
 			child.QueueFree();
+			//告诉 Godot：这个节点我不用了，请在合适的时机把它删掉
 
 		// ★ 2）把 RightHand 下面除了 WeaponSlot 以外的旧节点全部删掉（清理旧武器）
 		foreach (Node child in rightHand.GetChildren())
@@ -695,10 +698,10 @@ public partial class Player : CharacterBody3D
 				child.QueueFree();
 		}
 
-		holder.Position = Vector3.Zero;
-		holder.Rotation = Vector3.Zero;
-		holder.Scale = Vector3.One;
-		return holder;
+		holder.Position = Vector3.Zero;//Position：节点的本地位置， 把节点的位置重置到父节点的原点
+		holder.Rotation = Vector3.Zero;//清除所有旋转，不歪、不转，方向和父节点完全一致
+		holder.Scale = Vector3.One;//Vector3.One：(1, 1, 1)，恢复为正常大小
+		return holder;//把这个已经“重置干净”的节点返回
 	}
 
 
@@ -745,9 +748,17 @@ public partial class Player : CharacterBody3D
 	public void Hit(Node3D weapon)
 	{
 		if (_hitTimer != null && _hitTimer.TimeLeft > 0f)
+		//_hitTimer.TimeLeft > 0f：这个计时器正在倒计时，还没结束，受击冷却中，不允许再次受击 / 扣血
+
 			return;
 
 		string from = weapon != null ? weapon.Name.ToString() : "unknown";
+		//三目运算符 ? :  ，条件 ? 结果A : 结果B
+		//	•	条件为 true → 用 结果A  •	条件为 false → 用 结果B
+		//声明一个字符串变量 from，用来表示：来源 / 谁造成的 / 从哪来
+		//weapon.Name.ToString()，weapon.Name：Godot 节点名（StringName），	ToString()：转成普通 string
+		//用武器节点的名字作为来源
+		//"unknown"，	•	防止空引用  •	保证 from 一定有值  •	Debug 时不至于崩
 		GD.Print($"player 被打，来自: {from}");
 
 		float damage = 1.0f;
@@ -757,7 +768,10 @@ public partial class Player : CharacterBody3D
 			if (damageProp.VariantType != Variant.Type.Nil)
 				damage = damageProp.AsSingle();
 			else if (weapon.HasMeta("damage"))
+			//处理武器额外属性（Meta）并读取伤害值 
+			//HasMeta("damage")：检查这个对象上是否有 名为 “damage” 的元数据
 				damage = (float)weapon.GetMeta("damage");
+				//如果武器对象有 damage 元数据，就把它的值当作伤害赋给 damage 变量。
 		}
 
 		Shield currentShield = GetCurrentShield();
