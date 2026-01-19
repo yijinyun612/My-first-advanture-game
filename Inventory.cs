@@ -20,11 +20,19 @@ public partial class Inventory : Control
 
 	private Global _global;
 
+
+
+	
+//先拿到所有路径备用
 	public override void _Ready()
 	{
 		// 背包在暂停时也要吃输入
 		ProcessMode = ProcessModeEnum.Always;
-
+		//这是 Godot 的 Control / Node / CanvasLayer 等节点的一个属性
+		//决定这个节点的 _Process 和 _Input 函数 什么时候会被引擎调用
+		//背包节点可能在游戏暂停时仍然需要响应玩家输入（比如按按钮翻页、选择物品）
+		//所以把 ProcessMode 设置成 Always，保证 _Input 函数 即使游戏暂停也会被调用
+		
 		GD.Print("=== Inventory._Ready 开始 ===");
 
 		// 1. 用“写死路径”直接拿到三个 Grid 和 Tabs
@@ -89,6 +97,10 @@ public partial class Inventory : Control
 			Visible = false;
 	}
 
+
+
+
+//把物品装进格子
 	// ====== 把某一类物品塞进一个 GridContainer ======
 	private void AddCategory(string category,
 		Dictionary<string, Dictionary<string, object>> source,
@@ -106,6 +118,13 @@ public partial class Inventory : Control
 		{
 			string key = kv.Key;
 			Dictionary<string, object> data = kv.Value;
+			//“把嵌套字典的值拿出来，方便后续操作里面的键值对。”
+			//kv：当前遍历的 键值对（KeyValuePair），代表 players 里的某一条记录
+			//kv.Key：当前记录的 键，比如 “player1” 或 “player2”
+			//kv.Value：当前记录的 值，也就是内层字典 Dictionary<string, object>
+			//key：你自己定义的变量，保存 kv.Key 的内容
+			//data：你自己定义的变量，保存 kv.Value 的内容，也就是该玩家的属性字典
+
 
 			Node instNode = ItemScene.Instantiate();
 			Item item = instNode as Item;
@@ -127,6 +146,11 @@ public partial class Inventory : Control
 		GD.Print($"Inventory.AddCategory 完成: {category}, 实际生成数量={count}");
 	}
 
+
+
+
+	//默认取物件的方式
+
 	// ====== 默认装备：各分类取第一个格子 ======
 	private void EquipDefaultItems()
 	{
@@ -145,6 +169,10 @@ public partial class Inventory : Control
 			OnItemPressed(item); // 直接走统一逻辑：换装 + 高亮
 		}
 	}
+
+
+
+
 
 	// ====== 高亮当前分类中被选中的 Item ======
 	private void HighlightSelectedItem(string category, Item selected)
@@ -177,7 +205,10 @@ public partial class Inventory : Control
 		}
 	}
 
-	// ====== Item 按钮点击时调用 ======
+
+
+
+	// ====== Item 按钮点击时调用，装备到角色身上预览======
 	public void OnItemPressed(Item item)
 	{
 		if (item == null)
@@ -219,6 +250,11 @@ public partial class Inventory : Control
 		HighlightSelectedItem(category, item);
 	}
 
+
+
+
+	
+//接下来是如何切换各种物体并标亮，调用和关上菜单
 	// ================== Tab 切换与焦点 ==================
 
 	// 切换 tab：dir=+1 下一类，dir=-1 上一类
@@ -261,11 +297,20 @@ public partial class Inventory : Control
 			c.GrabFocus();
 	}
 
+
+
+	
+
 	// ★ 给 Player 调用的版本：打开菜单时用这个
 	public void FocusFirstItem()
 	{
 		FocusCurrentTabFirstItem();
 	}
+
+
+
+
+	
 
 	// 背包打开时：把 switch_weapon / switch_shield 用来切 tab
 	public override void _UnhandledInput(InputEvent @event)
@@ -285,6 +330,10 @@ public partial class Inventory : Control
 		}
 	}
 
+
+
+	
+
 	// ================== 打开 / 关闭背包（监听 M 键） ==================
 	public override void _Process(double delta)
 	{
@@ -292,6 +341,7 @@ public partial class Inventory : Control
 		if (Input.IsActionJustPressed("menu"))
 		{
 			Visible = !Visible;
+		
 
 			// 打开时把焦点给当前 Tab 的第一个格子
 			if (Visible)
