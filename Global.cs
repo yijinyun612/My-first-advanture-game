@@ -13,6 +13,8 @@ public partial class Global : Node
 					{ "type", "weapon" },
 					{ "damage", 1 },
 					{ "thumbnail", GD.Load<Texture2D>("res://graphics/ui/thumbnails/dagger.png") },
+					//GD 是 Godot 提供的一个 全局静态类（类似工具类），里面有很多 静态方法，用来做通用操作。
+					//Load<T>(path) 是 GD 的一个静态泛型方法，用来 加载资源（Texture、Scene、Script 等等）。
 					{ "scene", GD.Load<PackedScene>("res://scenes/weapons/dagger.tscn") },
 					{ "animation", "1H_Melee_Attack_Stab" },
 					{ "range", 1.2f },
