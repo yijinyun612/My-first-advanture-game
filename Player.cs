@@ -730,6 +730,7 @@ public partial class Player : CharacterBody3D
 		holder.Position = Vector3.Zero;
 		holder.Rotation = Vector3.Zero;
 		holder.Scale = Vector3.One;
+		//代表1，1，1 把物体变成正常大小
 		return holder;
 	}
 
