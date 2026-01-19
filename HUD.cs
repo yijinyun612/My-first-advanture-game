@@ -1,6 +1,7 @@
 using Godot;
 
 public partial class HUD : Control
+//HUD 本身 不关心血量逻辑，它只负责 “把血量数字可视化成心形 UI”。
 {
 	// 拖到这里：heart.tscn（单个心形的场景）
 	[Export] public PackedScene HeartScene { get; set; }
