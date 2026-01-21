@@ -14,6 +14,8 @@ public partial class Item : Button
 	// 实际信号名为 "ItemSelected"
 	[Signal]
 	public delegate void ItemSelectedEventHandler(Item item);
+	//delegate 真正厉害的地方：函数可以当变量用
+	//以后凡是“没有参数、没有返回值的函数”，都可以放进 AttackDelegate 里
 
 	// ================== 可导出路径 ==================
 	[Export] public NodePath IconRectPath = "TextureRect";
@@ -43,6 +45,7 @@ public partial class Item : Button
 	public Dictionary<string, object> RawData => _rawData;
 	public bool IsEquipped => _equipped;
 
+//运行时缓存，初始化
 	public override void _Ready()
 	{
 		_iconRect = GetNodeOrNull<TextureRect>(IconRectPath);
