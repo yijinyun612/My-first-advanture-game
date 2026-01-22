@@ -99,16 +99,16 @@ public partial class Item : Button
 			var texObj = _rawData["thumbnail"];
 			if (texObj is Texture2D t2d)
 			{
-				tex = t2d;
+				tex = t2d;//数据里已经给了一个「可以直接用的贴图资源」，那就别折腾了。
 			}
 			else if (texObj is string path)
 			{
 				var loaded = GD.Load<Texture2D>(path);
 				if (loaded != null)
 					tex = loaded;
+			//	把加载到的贴图  •	存进本地变量 tex  •	后面统一用 tex 来设置 UI
 			}
 		}
-
 		// 2）如果上面没拿到贴图，就按 key 自动找：
 		//    res://graphics/ui/thumbnails/<key>.png
 		if (tex == null && !string.IsNullOrEmpty(_key) && _iconRect != null)
@@ -123,6 +123,7 @@ public partial class Item : Button
 			_iconRect.Texture = tex;
 
 		// ----------------- scene 字段：PackedScene 或路径 -----------------
+		//匹配实例场景
 		if (_rawData.ContainsKey("scene"))
 		{
 			var s = _rawData["scene"];
@@ -135,26 +136,32 @@ public partial class Item : Button
 				var loaded = GD.Load<PackedScene>(sp);
 				if (loaded != null)
 					_scene = loaded;
+					//_scene  PackedScene  模板/蓝图，用来生成实体
+
 			}
 		}
 
 		// ----------------- 名称显示（可选） -----------------
+		//匹配名字
 		if (_label != null)
 		{
 			if (_rawData.ContainsKey("name") && _rawData["name"] is string nm)
 			{
 				Name = nm;
-				_label.Text = nm;
+				_label.Text = nm;	//把名称显示在 UI 上
 			}
 			else if (_rawData.ContainsKey("label") && _rawData["label"] is string lab)
 			{
 				Name = lab;
-				_label.Text = lab;
+				_label.Text = lab;//	把名称显示在 UI 上
+				//Node Name：调试、脚本引用
+				//UI Label：玩家可见
 			}
 		}
 	}
 
 	// 兼容旧写法：Inventory 里如果还在用 item.Setup(data) 也能跑
+	// 这一段是 给外部系统（Inventory / Player）用的接口
 	public void Setup(Dictionary<string, object> data)
 	{
 		Setup("", "", data);
@@ -192,11 +199,20 @@ public partial class Item : Button
 
 		// 按 pdf 的意思：被选中的更亮一点
 		Modulate = value ? Colors.White : new Color(0.95f, 0.95f, 0.95f);
+		//	Modulate 是 Godot Node/Control 的颜色调节属性
+		//可以理解为 整体颜色乘法调节
+		// •	白色 = 原色显示  •	灰色 = 让控件看起来暗一点  •	value 是布尔值（true/false）
+		//条件运算符 ?: 	读作：如果 value 为 true，用 Colors.White，否则用 Color(0.95,0.95,0.95)
+
 	}
 
 	public Texture2D GetThumbnail()
 	{
 		return _iconRect != null ? _iconRect.Texture : null;
+		//三元运算符
+		//如果有图标控件，就返回它现在用的贴图；
+		//如果没有图标控件，就返回 null。
+		//Thumbnail缩略图的英文
 	}
 
 	public Node CreatePreviewInstance()
