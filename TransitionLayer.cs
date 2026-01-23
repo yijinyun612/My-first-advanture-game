@@ -25,5 +25,6 @@ public partial class TransitionLayer : CanvasLayer
 		// fade-out
 		var tween2 = CreateTween();
 		tween2.TweenProperty(_colorRect, "modulate", new Color(0, 0, 0, 0), 0.5f);
+		//在 0.5 秒内，让 _colorRect 的颜色平滑过渡到透明
 	}
 }
