@@ -30,6 +30,8 @@ public partial class Rogue : Node3D
 			&& !Input.IsActionPressed("ui_right"))
 		{
 			RotateY(Mathf.DegToRad(AutoRotateSpeedDeg * dt));
+			//	Unity / Godot 的方法，把角度（degree）转为弧度（radian）
+	        //•	因为底层旋转函数通常使用弧度而不是度数。
 		}
 
 		// -------- 键盘左右旋转 --------
